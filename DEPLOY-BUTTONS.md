@@ -8,11 +8,11 @@ Ce guide explique comment configurer et utiliser les différents boutons de dép
 
 **Bouton :**
 ```markdown
-[![Deploy to DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/VOTRE-USERNAME/pubky-stack/tree/main)
+[![Deploy to DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/PastaGringo/pubky-homeserver-docker/tree/main)
 ```
 
 **Configuration requise :**
-1. Remplacez `VOTRE-USERNAME` par votre nom d'utilisateur GitHub
+1. Le repository est configuré pour `PastaGringo/pubky-homeserver-docker`
 2. Assurez-vous que le fichier `.do/app.yaml` est présent dans votre repository
 3. Le repository doit être public ou accessible à DigitalOcean
 
@@ -26,11 +26,11 @@ Ce guide explique comment configurer et utiliser les différents boutons de dép
 
 **Commande :**
 ```bash
-curl -sSL https://raw.githubusercontent.com/VOTRE-USERNAME/pubky-stack/main/deploy-one-click.sh | bash
+curl -sSL https://raw.githubusercontent.com/PastaGringo/pubky-homeserver-docker/main/deploy-one-click.sh | bash
 ```
 
 **Configuration requise :**
-1. Remplacez `VOTRE-USERNAME` par votre nom d'utilisateur GitHub
+1. Le script est configuré pour le repository `PastaGringo/pubky-homeserver-docker`
 2. Le script `deploy-one-click.sh` doit être dans la racine du repository
 3. Le repository doit être public pour l'accès via `raw.githubusercontent.com`
 
@@ -44,18 +44,17 @@ curl -sSL https://raw.githubusercontent.com/VOTRE-USERNAME/pubky-stack/main/depl
 
 ### Étape 1 : Personnaliser les URLs
 
-Dans tous les fichiers, remplacez `VOTRE-USERNAME` par votre nom d'utilisateur GitHub :
+Les URLs sont maintenant configurées pour le repository `PastaGringo/pubky-homeserver-docker` :
 
-**Fichiers à modifier :**
-- `README.md` (badges et liens)
-- `.do/app.yaml` (configuration GitHub)
-- `.do/deploy.template.yaml` (template)
+- `README.md` - Boutons et liens de déploiement
+- `.do/app.yaml` - Configuration DigitalOcean App Platform
+- `.do/deploy.template.yaml` - Template de déploiement
+- `DEPLOY-BUTTONS.md` - Documentation des boutons
 
-**Exemple :**
+**Vérification des URLs :**
 ```bash
-# Remplacer dans tous les fichiers
-sed -i 's/VOTRE-USERNAME/monusername/g' README.md
-sed -i 's/VOTRE-USERNAME/monusername/g' .do/app.yaml
+# Vérifier les URLs configurées
+grep -r "PastaGringo/pubky-homeserver-docker" .
 ```
 
 ### Étape 2 : Configurer DigitalOcean App Platform
@@ -112,12 +111,12 @@ Vous pouvez créer vos propres badges avec [shields.io](https://shields.io/) :
 
 **Style GitHub :**
 ```markdown
-[<img src="https://img.shields.io/badge/Deploy%20to-DigitalOcean-0080FF?style=for-the-badge&logo=digitalocean" height="32">](https://cloud.digitalocean.com/apps/new?repo=https://github.com/VOTRE-USERNAME/pubky-stack)
+[<img src="https://img.shields.io/badge/Deploy%20to-DigitalOcean-0080FF?style=for-the-badge&logo=digitalocean" height="32">](https://cloud.digitalocean.com/apps/new?repo=https://github.com/PastaGringo/pubky-homeserver-docker)
 ```
 
 **Style personnalisé :**
 ```markdown
-<a href="https://cloud.digitalocean.com/apps/new?repo=https://github.com/VOTRE-USERNAME/pubky-stack">
+<a href="https://cloud.digitalocean.com/apps/new?repo=https://github.com/PastaGringo/pubky-homeserver-docker">
   <img src="https://www.deploytodo.com/do-btn-blue-ghost.svg" alt="Deploy to DigitalOcean">
 </a>
 ```

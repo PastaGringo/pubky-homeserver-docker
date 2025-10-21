@@ -3,7 +3,7 @@ services:
 - name: pubky-homeserver
   source_dir: /
   github:
-    repo: votre-username/pubky-stack
+    repo: PastaGringo/pubky-homeserver-docker
     branch: main
     deploy_on_push: true
   run_command: |

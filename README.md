@@ -1,7 +1,7 @@
 # Pubky-Core Docker Stack
 
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)](https://www.docker.com/)
-[![DigitalOcean](https://img.shields.io/badge/Deploy%20to-DigitalOcean-0080FF?logo=digitalocean)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/VOTRE-USERNAME/pubky-stack/tree/main)
+[![DigitalOcean](https://img.shields.io/badge/Deploy%20to-DigitalOcean-0080FF?logo=digitalocean)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/PastaGringo/pubky-homeserver-docker/tree/main)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Pubky Core](https://img.shields.io/badge/Pubky%20Core-v0.5.4-orange)](https://github.com/pubky/pubky-core)
 
@@ -9,13 +9,13 @@
 
 ### DigitalOcean
 
-[![Deploy to DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/VOTRE-USERNAME/pubky-stack/tree/main)
+[![Deploy to DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/PastaGringo/pubky-homeserver-docker/tree/main)
 
 **Ou via script automatisé :**
 
 ```bash
 # Déploiement automatique sur VPS DigitalOcean
-curl -sSL https://raw.githubusercontent.com/VOTRE-USERNAME/pubky-stack/main/deploy-one-click.sh | bash
+curl -sSL https://raw.githubusercontent.com/PastaGringo/pubky-homeserver-docker/main/deploy-one-click.sh | bash
 ```
 
 ### Autres plateformes
@@ -226,7 +226,7 @@ Pour plus de contrôle, utilisez notre script de déploiement automatisé :
 
 ```bash
 # Sur votre VPS DigitalOcean (Ubuntu 20.04/22.04)
-curl -sSL https://raw.githubusercontent.com/VOTRE-USERNAME/pubky-stack/main/deploy-one-click.sh | bash
+curl -sSL https://raw.githubusercontent.com/PastaGringo/pubky-homeserver-docker/main/deploy-one-click.sh | bash
 ```
 
 **Ce script :**
@@ -251,7 +251,7 @@ Pour les utilisateurs avancés :
 Pour le développement et les tests :
 
 ```bash
-git clone https://github.com/VOTRE-USERNAME/pubky-stack.git
+git clone https://github.com/PastaGringo/pubky-homeserver-docker.git
 cd pubky-stack
 docker-compose up -d
 ```
