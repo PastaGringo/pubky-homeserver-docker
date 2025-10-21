@@ -1,44 +1,22 @@
-# Template de déploiement DigitalOcean App Platform pour Pubky Homeserver
-# ========================================================================
-# Ce fichier peut être utilisé pour déployer Pubky Homeserver sur DigitalOcean App Platform
-
 name: pubky-homeserver
 region: fra
-
 services:
 - name: pubky-homeserver
-  source_dir: /
   github:
     repo: PastaGringo/pubky-homeserver-docker
     branch: main
     deploy_on_push: true
-  
-  # Configuration du runtime
-  instance_count: 1
-  instance_size_slug: basic-xxs  # 0.5 vCPU, 0.5 GB RAM
-  
-  # Variables d'environnement
-  envs:
-  - key: PUBKY_VERSION
-    value: "v0.5.4"
-  - key: PLATFORM
-    value: "linux-amd64"
-  - key: RUST_LOG
-    value: "info"
-  - key: PUBKY_DATA_DIR
-    value: "/app/data"
-  
-  # Configuration Docker
   dockerfile_path: Dockerfile
   http_port: 6286
-  
-  # Routes
-  routes:
-  - path: /
-
-# Configuration des domaines (optionnel)
-# Décommentez et modifiez selon vos besoins
-# domains:
-# - domain: votre-domaine.com
-#   type: PRIMARY
-#   zone: votre-domaine.com
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  source_dir: /
+  envs:
+  - key: PUBKY_VERSION
+    value: v0.5.4
+  - key: PLATFORM
+    value: linux-amd64
+  - key: RUST_LOG
+    value: info
+  - key: PUBKY_DATA_DIR
+    value: /app/data

@@ -1,7 +1,6 @@
 name: pubky-homeserver
 services:
 - name: pubky-homeserver
-  source_dir: /
   github:
     repo: PastaGringo/pubky-homeserver-docker
     branch: main
@@ -10,8 +9,7 @@ services:
   http_port: 6286
   instance_count: 1
   instance_size_slug: basic-xxs
-  routes:
-  - path: /
+  source_dir: /
   envs:
   - key: PUBKY_VERSION
     value: v0.5.4
