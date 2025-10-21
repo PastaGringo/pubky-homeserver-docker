@@ -1,0 +1,63 @@
+name: pubky-homeserver
+services:
+- name: pubky-homeserver
+  source_dir: /
+  github:
+    repo: votre-username/pubky-stack
+    branch: main
+    deploy_on_push: true
+  run_command: |
+    # Installation des dépendances
+    apt-get update && apt-get install -y curl
+    
+    # Récupération de l'IP publique
+    export PUBLIC_IP=$(curl -s https://api.ipify.org)
+    
+    # Configuration de l'environnement
+    export PUBKY_VERSION=v0.5.4
+    export PLATFORM=linux-amd64
+    export PUBKY_HOST=0.0.0.0
+    export PUBKY_PORT=6287
+    export PUBKY_DATA_DIR=/app/data
+    export RUST_LOG=info
+    
+    # Démarrage du homeserver
+    ./pubky-homeserver \
+      --data /app/data \
+      --http 0.0.0.0:6286 \
+      --pubky 0.0.0.0:6287 \
+      --admin 0.0.0.0:6288 \
+      --dht 0.0.0.0:6881
+  build_command: |
+    # Télécharger le binaire pré-compilé
+    PUBKY_VERSION=${PUBKY_VERSION:-v0.5.4}
+    PLATFORM=${PLATFORM:-linux-amd64}
+    
+    # Créer le répertoire de données
+    mkdir -p /app/data
+    
+    # Télécharger et extraire le binaire
+    curl -L "https://github.com/pubky/pubky-core/releases/download/${PUBKY_VERSION}/pubky-core-${PUBKY_VERSION}-${PLATFORM}.tar.gz" \
+      | tar -xz -C /usr/local/bin/
+    
+    # Rendre exécutable
+    chmod +x /usr/local/bin/pubky-homeserver
+  environment_slug: ubuntu-22-04-x64
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 6286
+  routes:
+  - path: /
+  envs:
+  - key: PUBKY_VERSION
+    value: v0.5.4
+  - key: PLATFORM
+    value: linux-amd64
+  - key: PUBKY_HOST
+    value: 0.0.0.0
+  - key: PUBKY_PORT
+    value: "6287"
+  - key: PUBKY_DATA_DIR
+    value: /app/data
+  - key: RUST_LOG
+    value: info

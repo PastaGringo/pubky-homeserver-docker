@@ -1,0 +1,39 @@
+# Fichiers et dossiers à ignorer lors du build Docker
+
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Logs
+*.log
+logs/
+
+# Données temporaires
+tmp/
+temp/
+
+# Configuration locale (sera montée via volume)
+config/
+data/
+
+# Fichiers de sauvegarde
+*.backup
+*.bak
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker
+docker-compose.override.yml
+.env.local

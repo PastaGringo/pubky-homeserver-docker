@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  pubky-homeserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PUBKY_VERSION: ${PUBKY_VERSION:-v0.5.4}
+        PLATFORM: ${PLATFORM:-linux-amd64}
+    container_name: pubky-homeserver
+    restart: unless-stopped
+    ports:
+      - "${PUBLIC_IP:-0.0.0.0}:6287:6287"
+    volumes:
+      # Données persistantes
+      - pubky_data:${PUBKY_DATA_DIR:-/app/data}
+      # Configuration personnalisée (optionnel)
+      - ./config:/app/config:ro
+    command: ["homeserver", "--data-dir", "${PUBKY_DATA_DIR:-/app/data}"]
+    environment:
+      # Variables d'environnement pour la configuration
+      - RUST_LOG=info
+      - PUBKY_HOST=${PUBKY_HOST:-0.0.0.0}
+      - PUBKY_PORT=${PUBKY_PORT:-6287}
+    networks:
+      - pubky-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6286/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    # Limites de ressources
+    deploy:
+      resources:
+        limits:
+          memory: ${MEMORY_LIMIT:-512M}
+          cpus: ${CPU_LIMIT:-0.5}
+        reservations:
+          memory: ${MEMORY_RESERVATION:-256M}
+          cpus: ${CPU_RESERVATION:-0.25}
+
+  # Service optionnel pour monitoring (décommentez si nécessaire)
+  # pubky-monitor:
+  #   image: prom/prometheus:latest
+  #   container_name: pubky-monitor
+  #   restart: unless-stopped
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  #     - prometheus_data:/prometheus
+  #   networks:
+  #     - pubky-network
+  #   depends_on:
+  #     - pubky-homeserver
+
+volumes:
+  pubky_data:
+    driver: local
+  # prometheus_data:
+  #   driver: local
+
+networks:
+  pubky-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

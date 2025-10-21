@@ -1,0 +1,77 @@
+# Template de déploiement DigitalOcean App Platform pour Pubky Homeserver
+# ========================================================================
+# Ce fichier peut être utilisé pour déployer Pubky Homeserver sur DigitalOcean App Platform
+
+name: pubky-homeserver
+region: fra
+
+services:
+- name: pubky-homeserver
+  source_dir: /
+  github:
+    repo: VOTRE-USERNAME/VOTRE-REPO
+    branch: main
+    deploy_on_push: true
+  
+  # Configuration du runtime
+  instance_count: 1
+  instance_size_slug: basic-xxs  # 0.5 vCPU, 0.5 GB RAM
+  
+  # Variables d'environnement
+  envs:
+  - key: PUBKY_VERSION
+    value: "v0.5.4"
+  - key: PLATFORM
+    value: "linux-amd64"
+  - key: RUST_LOG
+    value: "info"
+  - key: PUBKY_DATA_DIR
+    value: "/app/data"
+  
+  # Ports exposés
+  http_port: 6286
+  
+  # Commandes de build et run
+  build_command: |
+    # Télécharger et installer Pubky Homeserver
+    mkdir -p /app/data
+    cd /tmp
+    curl -L "https://github.com/pubky/pubky-core/releases/download/${PUBKY_VERSION}/pubky-core-${PUBKY_VERSION}-${PLATFORM}.tar.gz" -o pubky-core.tar.gz
+    tar -xzf pubky-core.tar.gz
+    mv pubky-homeserver /app/
+    chmod +x /app/pubky-homeserver
+    
+  run_command: |
+    # Récupérer l'IP publique de l'App Platform
+    export PUBLIC_IP=$(curl -s https://api.ipify.org)
+    echo "IP publique détectée: $PUBLIC_IP"
+    
+    # Démarrer Pubky Homeserver
+    /app/pubky-homeserver \
+      --data /app/data \
+      --http 0.0.0.0:6286 \
+      --pubky $PUBLIC_IP:6287 \
+      --admin 127.0.0.1:6288 \
+      --dht 0.0.0.0:6881
+  
+  # Health check
+  health_check:
+    http_path: /health
+    initial_delay_seconds: 30
+    period_seconds: 10
+    timeout_seconds: 5
+    failure_threshold: 3
+    success_threshold: 2
+
+# Configuration des domaines (optionnel)
+domains:
+- domain: votre-domaine.com
+  type: PRIMARY
+  zone: votre-domaine.com
+
+# Configuration des alertes (optionnel)
+alerts:
+- rule: CPU_UTILIZATION
+  value: 80
+- rule: MEM_UTILIZATION
+  value: 80

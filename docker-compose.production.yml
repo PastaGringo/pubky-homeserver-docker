@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  pubky-homeserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PUBKY_VERSION: ${PUBKY_VERSION:-v0.5.4}
+        PLATFORM: ${PLATFORM:-linux-amd64}
+    container_name: pubky-homeserver-prod
+    restart: unless-stopped
+    environment:
+      - RUST_LOG=${RUST_LOG:-info}
+      - PUBKY_HOST=${PUBKY_HOST:-0.0.0.0}
+      - PUBKY_PORT=${PUBKY_PORT:-6287}
+    ports:
+      - "${PUBLIC_IP:-0.0.0.0}:6287:6287"  # Pubky TLS
+      - "127.0.0.1:6286:6286"              # HTTP (local seulement)
+      - "127.0.0.1:6288:6288"              # Admin (local seulement)
+      - "${PUBLIC_IP:-0.0.0.0}:6881:6881/udp"  # DHT
+    volumes:
+      - pubky_data_prod:${PUBKY_DATA_DIR:-/app/data}
+    networks:
+      - pubky-network-prod
+    deploy:
+      resources:
+        limits:
+          memory: ${MEMORY_LIMIT:-1g}
+          cpus: '${CPU_LIMIT:-1.0}'
+        reservations:
+          memory: ${MEMORY_RESERVATION:-512m}
+          cpus: '${CPU_RESERVATION:-0.5}'
+    command: >
+      pubky-homeserver
+      --data ${PUBKY_DATA_DIR:-/app/data}
+      --http 0.0.0.0:6286
+      --pubky 0.0.0.0:6287
+      --admin 0.0.0.0:6288
+      --dht 0.0.0.0:6881
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6286/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  pubky_data_prod:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PUBKY_DATA_DIR:-/opt/pubky/data}
+
+networks:
+  pubky-network-prod:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
