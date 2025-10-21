@@ -28,50 +28,17 @@ services:
   - key: PUBKY_DATA_DIR
     value: "/app/data"
   
-  # Ports exposés
+  # Configuration Docker
+  dockerfile_path: Dockerfile
   http_port: 6286
   
-  # Commandes de build et run
-  build_command: |
-    # Télécharger et installer Pubky Homeserver
-    mkdir -p /app/data
-    cd /tmp
-    curl -L "https://github.com/pubky/pubky-core/releases/download/${PUBKY_VERSION}/pubky-core-${PUBKY_VERSION}-${PLATFORM}.tar.gz" -o pubky-core.tar.gz
-    tar -xzf pubky-core.tar.gz
-    mv pubky-homeserver /app/
-    chmod +x /app/pubky-homeserver
-    
-  run_command: |
-    # Récupérer l'IP publique de l'App Platform
-    export PUBLIC_IP=$(curl -s https://api.ipify.org)
-    echo "IP publique détectée: $PUBLIC_IP"
-    
-    # Démarrer Pubky Homeserver
-    /app/pubky-homeserver \
-      --data /app/data \
-      --http 0.0.0.0:6286 \
-      --pubky $PUBLIC_IP:6287 \
-      --admin 127.0.0.1:6288 \
-      --dht 0.0.0.0:6881
-  
-  # Health check
-  health_check:
-    http_path: /health
-    initial_delay_seconds: 30
-    period_seconds: 10
-    timeout_seconds: 5
-    failure_threshold: 3
-    success_threshold: 2
+  # Routes
+  routes:
+  - path: /
 
 # Configuration des domaines (optionnel)
-domains:
-- domain: votre-domaine.com
-  type: PRIMARY
-  zone: votre-domaine.com
-
-# Configuration des alertes (optionnel)
-alerts:
-- rule: CPU_UTILIZATION
-  value: 80
-- rule: MEM_UTILIZATION
-  value: 80
+# Décommentez et modifiez selon vos besoins
+# domains:
+# - domain: votre-domaine.com
+#   type: PRIMARY
+#   zone: votre-domaine.com
