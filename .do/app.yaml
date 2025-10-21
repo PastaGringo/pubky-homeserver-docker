@@ -1,4 +1,5 @@
 name: pubky-homeserver
+region: nyc
 services:
 - name: pubky-homeserver
   github:
